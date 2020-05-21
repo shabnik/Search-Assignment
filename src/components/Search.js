@@ -9,34 +9,34 @@ class Search extends React.Component {
     this.state = {
       query: "",
       results: [],
-      search: ""
+      search: "",
     };
   }
 
-  handleOnInputChange = event => {
+  handleOnInputChange = (event) => {
     const query = event.target.value;
     this.setState({ query: query }, () => {
       if (this.state.query.length !== "" && this.state.query) {
         this.fetchSearchResults(query);
       } else {
         this.setState(() => ({
-          results: [] //empties the result array so no suggestions show
+          results: [], //empties the result array so no suggestions show
         }));
       }
     });
   };
 
-  fetchSearchResults = query => {
+  fetchSearchResults = (query) => {
     const searchUrl = `http://localhost:3000/all?q=${query}`;
     axios
       .get(searchUrl, { headers: { "Access-Control-Allow-Origin": "*" } })
-      .then(responses => {
+      .then((responses) => {
         console.log(responses.data);
         this.setState({
-          results: responses.data
+          results: responses.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -45,22 +45,22 @@ class Search extends React.Component {
   itemSelected(value) {
     this.setState(() => ({
       query: value,
-      results: [] //empties the result array so no suggestions show
+      results: [], //empties the result array so no suggestions show
     }));
   }
 
   //when the user clickes on the enter button
-  submitHandler = event => {
+  submitHandler = (event) => {
     axios
       .post(`http://localhost:3000/all?q=`, { search: this.state.query })
-      .then(response => {
+      .then((response) => {
         console.log(response);
         this.setState(() => ({
           query: "", //clearns the query
-          results: [] //empties the results array so no suggestions show
+          results: [], //empties the results array so no suggestions show
         }));
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -69,9 +69,10 @@ class Search extends React.Component {
     const query = this.state.query;
     return (
       <div className="container">
-        <h2 className="heading">Search</h2>
+        <h1 className="heading">Search</h1>
         <label className="search-label" htmlFor="search-input">
           <input
+            className="input-label"
             type="text"
             value={query}
             name="query"
@@ -79,12 +80,11 @@ class Search extends React.Component {
             placeholder="Search..."
             onChange={this.handleOnInputChange}
           />
-
           <ul className="ul-list">
             {/*displays the suggstions to the user*/}
             {this.state.results.map((item, index) => (
               <li
-                className="ul-li"
+                className="li-list"
                 key={index}
                 onClick={() => this.itemSelected(item.search)}
               >
